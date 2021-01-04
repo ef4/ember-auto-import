@@ -46,5 +46,12 @@ module.exports = function (environment) {
       let document = new JSDOM(html).window.document;
       assert.equal(document.querySelector('[data-test="dynamic-import-result"]').textContent.trim(), 'vanilla');
     });
+
+    test('v2-addon', async function (assert) {
+      let page = await fastboot.visit('/v2-addon');
+      let html = await page.html();
+      let document = new JSDOM(html).window.document;
+      assert.equal(document.querySelector('[data-test="sample-v2-addon"]').textContent.trim(), 'it worked');
+    });
   });
 };

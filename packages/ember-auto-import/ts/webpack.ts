@@ -8,8 +8,10 @@ import { BundleDependencies, ResolvedImport, sharedResolverOptions } from './spl
 import { BundlerHook, BuildResult } from './bundler';
 import BundleConfig from './bundle-config';
 import { ensureDirSync } from 'fs-extra';
-import { babelFilter } from '@embroider/core';
+import { babelFilter, templateCompilerModule } from '@embroider/core';
 import { Options } from './package';
+import type { HbsLoaderConfig } from '@embroider/hbs-loader';
+import { Memoize } from 'typescript-memoize';
 
 registerHelper('js-string-escape', jsStringEscape);
 registerHelper('join', function (list, connector) {
@@ -84,7 +86,7 @@ export default class WebpackBundler implements BundlerHook {
   private outputDir: string;
 
   constructor(
-    bundles: BundleConfig,
+    private bundles: BundleConfig,
     environment: 'production' | 'development' | 'test',
     extraWebpackConfig: webpack.Configuration | undefined,
     private consoleWrite: (message: string) => void,
@@ -137,7 +139,7 @@ export default class WebpackBundler implements BundlerHook {
       },
       module: {
         noParse: file => file === join(this.stagingDir, 'l.js'),
-        rules: [this.babelRule()],
+        rules: [this.babelRule(), this.hbsRule()],
       },
       node: false,
     };
@@ -145,6 +147,23 @@ export default class WebpackBundler implements BundlerHook {
       mergeConfig(config, extraWebpackConfig);
     }
     this.webpack = webpack(config);
+  }
+
+  @Memoize()
+  private get templateCompilerFile(): string {
+    let file = join(this.stagingDir, '_template_compiler_.js');
+    writeFileSync(
+      file,
+      templateCompilerModule(
+        {
+          compilerPath: this.bundles.emberTemplateCompilerPath,
+          EmberENV: {},
+          plugins: { ast: [] },
+        },
+        []
+      ).src
+    );
+    return file;
   }
 
   private babelRule(): webpack.Rule {
@@ -163,6 +182,10 @@ export default class WebpackBundler implements BundlerHook {
       use: {
         loader: 'babel-loader-8',
         options: {
+          plugins: [
+            require.resolve('babel-plugin-ember-data-packages-polyfill'),
+            require.resolve('babel-plugin-ember-modules-api-polyfill'),
+          ],
           presets: [
             [
               require.resolve('@babel/preset-env'),
@@ -174,6 +197,28 @@ export default class WebpackBundler implements BundlerHook {
           ],
         },
       },
+    };
+  }
+
+  private hbsRule(): webpack.RuleSetRule {
+    let options: HbsLoaderConfig = {
+      templateCompilerFile: this.templateCompilerFile,
+      // TODO: we will ultimately need to run with multiple variants in prod
+      // builds
+      variant: {
+        name: 'dev',
+        runtime: 'all',
+        optimizeForProduction: false,
+      },
+    };
+    return {
+      test: /\.hbs$/,
+      use: [
+        {
+          loader: require.resolve('@embroider/hbs-loader'),
+          options,
+        },
+      ],
     };
   }
 

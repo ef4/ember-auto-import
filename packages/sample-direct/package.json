@@ -52,6 +52,7 @@
     "loader.js": "*",
     "lodash-es": "*",
     "moment": "*",
+    "sample-v2-addon":"*",
     "qunit": "*"
   },
   "engines": {

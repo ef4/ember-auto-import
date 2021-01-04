@@ -3,11 +3,13 @@
   "app" vs "test" bundles.
 */
 
-import { dirname } from 'path';
+import { dirname, resolve } from 'path';
 import { AppInstance } from './ember-cli-models';
 const testsPattern = new RegExp(`^/?[^/]+/(tests|test-support)/`);
 
 import type { TreeType } from './analyzer';
+import resolvePackagePath from 'resolve-package-path';
+import { Memoize } from 'typescript-memoize';
 
 function exhausted(label: string, value: never): never {
   throw new Error(`Unknown ${label} specified: ${value}`);
@@ -85,5 +87,14 @@ export default class BundleConfig {
 
   get lazyChunkPath() {
     return dirname(this.bundleEntrypoint(this.names[0], 'js')!);
+  }
+
+  @Memoize()
+  get emberTemplateCompilerPath(): string {
+    let pkgPath = resolvePackagePath('ember-source', this.emberApp.project.root);
+    if (!pkgPath) {
+      throw new Error(`unable to locate ember-source`);
+    }
+    return resolve(dirname(pkgPath), './dist/ember-template-compiler.js');
   }
 }

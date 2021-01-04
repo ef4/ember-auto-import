@@ -313,7 +313,7 @@ function isEmberAddonDependency(pathToPackageJSON: string): boolean {
   if (cached === undefined) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     let packageJSON = require(pathToPackageJSON);
-    let answer = packageJSON.keywords?.includes('ember-addon') || false;
+    let answer = packageJSON.keywords?.includes('ember-addon') && packageJSON['ember-addon']?.version !== 2;
     isAddonCache.set(pathToPackageJSON, answer);
     return answer;
   } else {

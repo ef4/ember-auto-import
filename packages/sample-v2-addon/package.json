@@ -1,0 +1,22 @@
+{
+  "name": "sample-v2-addon",
+  "version": "0.0.0",
+  "description": "The default blueprint for ember-cli addons.",
+  "keywords": [
+    "ember-addon"
+  ],
+  "repository": "",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {
+    "@embroider/util": "0.35.0"
+  },
+  "private": true,
+  "devDependencies": {},
+  "ember-addon": {
+    "version": 2,
+    "type": "addon",
+    "main": "addon-main.js",
+    "app-js": "app"
+  }
+}
