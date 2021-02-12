@@ -117,7 +117,7 @@ Supported Options
 
  - `alias`: _object_, Map from package names to substitute packages that will be used instead.
  - `exclude`: _list of strings, defaults to []_. Packages in this list will be ignored by ember-auto-import. Can be helpful if the package is already included another way (like a shim from some other Ember addon).
- - `forbidEval`: _boolean_, defaults to false. We use `eval` in development by default (because that is the fastest way to provide sourcemaps). If you need to comply with a strict Content Security Policy (CSP), you can set `forbidEval: true`. You will still get sourcemaps, they will just use a slower implementation.
+ - `forbidEval`: _boolean_, controls if `eval` is used in development. It is used because that is the fastest way to provide sourcemaps. Defaults to `false` unless [ember-cli-content-security-policy](https://github.com/rwjblue/ember-cli-content-security-policy) is used.
  - `publicAssetURL`: where to load additional dynamic javascript files from. You usually don't need to set this -- the default works for most apps. However, if you're using `<script defer>` or another method of asynchronously loading your vendor.js script you will need to set this to the URL where your asset directory is served (typically `/assets`).
  - `skipBabel`: _list of objects, defaults to []_. The specified packages will be skipped from babel transpilation.
  - `webpack`: _object_, An object that will get merged into the configuration we pass to webpack. This lets you work around quirks in underlying libraries and otherwise customize the way Webpack will assemble your dependencies.
@@ -189,7 +189,9 @@ See [webpack's docs on Node polyfills](https://v4.webpack.js.org/configuration/n
 
 ###  I use Content Security Policy (CSP) and it breaks ember-auto-import.
 
-See `forbidEval` above.
+Ember Auto Import uses `eval` in development if `forbidEval` is `false`. Recent versions detect if [ember-cli-content-security-policy](https://github.com/rwjblue/ember-cli-content-security-policy) is used. `forbidEval` default to `true` in that cases.
+
+If you use an older version or use Content Security Policy without that addon, you should set `forbidEval` option to `true` explicitly.
 
 ### I'm trying to load a jQuery plugin, but it doesn't attach itself to the copy of jQuery that's already in my Ember app.
 

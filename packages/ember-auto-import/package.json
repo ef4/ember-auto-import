@@ -32,6 +32,7 @@
     "@babel/traverse": "^7.1.6",
     "@babel/types": "^7.1.6",
     "@embroider/core": "^0.33.0",
+    "@embroider/macros": "^0.36.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
@@ -108,6 +109,14 @@
     "qunit": "^2.6.1",
     "qunit-assertions-extra": "^0.8.5",
     "typescript": "^4.1.2"
+  },
+  "peerDependencies": {
+    "ember-cli-content-security-policy": "*"
+  },
+  "peerDependenciesMeta": {
+    "ember-cli-content-security-policy": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">= 10.*"

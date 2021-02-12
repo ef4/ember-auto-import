@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import { Memoize } from 'typescript-memoize';
 import { Configuration } from 'webpack';
 import { AddonInstance, isDeepAddonInstance, Project } from './ember-cli-models';
+import { dependencySatisfies } from '@embroider/macros';
 
 const cache: WeakMap<AddonInstance, Package> = new WeakMap();
 let pkgGeneration = 0;
@@ -301,9 +302,16 @@ export default class Package {
   }
 
   get forbidsEval(): boolean {
-    // only apps (not addons) are allowed to set this, because it's motivated by
+    // Use explicit configuration given by application if present.
+    // Addons are not allowed to set this, because it's motivated by
     // the apps own Content Security Policy.
-    return Boolean(!this.isAddon && this.autoImportOptions && this.autoImportOptions.forbidEval);
+    if (!this.isAddon && this.autoImportOptions?.forbidEval !== undefined) {
+      return Boolean(this.autoImportOptions.forbidEval);
+    }
+
+    // fallback to default value, which should be `true` unless application
+    // has ember-cli-content-security-policy dependency
+    return !dependencySatisfies('ember-cli-content-security-policy', '*');
   }
 }
 
