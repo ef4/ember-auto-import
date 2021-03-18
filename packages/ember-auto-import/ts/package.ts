@@ -60,6 +60,7 @@ export default class Package {
   private isDeveloping: boolean;
   private pkgGeneration: number;
   private pkgCache: any;
+  private localExcludes: Set<string>;
 
   static lookupParentOf(child: AddonInstance): Package {
     if (!cache.has(child)) {
@@ -88,6 +89,7 @@ export default class Package {
     // Stash our own config options
     this.autoImportOptions = this._options.autoImport;
 
+    this.localExcludes = new Set(excludePackagesFomOptions(this.autoImportOptions));
     this.pkgCache = child.parent.pkg;
     this.pkgGeneration = pkgGeneration;
   }
@@ -248,6 +250,10 @@ export default class Package {
     };
   }
 
+  excludePackageByName(name: string) {
+    this.localExcludes.add(name);
+  }
+
   private assertAllowedDependency(name: string) {
     if (this.isAddon && !this.hasNonDevDependency(name)) {
       throw new Error(
@@ -257,9 +263,7 @@ export default class Package {
   }
 
   private excludesDependency(name: string): boolean {
-    return Boolean(
-      this.autoImportOptions && this.autoImportOptions.exclude && this.autoImportOptions.exclude.includes(name)
-    );
+    return this.localExcludes.has(name);
   }
 
   get webpackConfig(): any {
@@ -355,4 +359,13 @@ function isPrecise(leadingQuasi: string): boolean {
   let slashes = count(leadingQuasi, '/');
   let minSlashes = leadingQuasi.startsWith('@') ? 2 : 1;
   return slashes >= minSlashes;
+}
+
+function excludePackagesFomOptions(opts: Options | undefined) {
+  if (opts) {
+    if (Array.isArray(opts.exclude)) {
+      return opts.exclude;
+    }
+  }
+  return [];
 }

@@ -42,10 +42,15 @@ export default class AutoImport implements AutoImportSharedAPI {
   constructor(addonInstance: AddonInstance) {
     this.primaryPackage = addonInstance;
     let topmostAddon = findTopmostAddon(addonInstance);
-    this.packages.add(Package.lookupParentOf(topmostAddon));
     let host = topmostAddon.app;
     this.env = host.env;
     this.targets = host.project.targets;
+
+    let entryPackage = Package.lookupParentOf(topmostAddon);
+    entryPackage.excludePackageByName(host.project.pkg.name);
+
+    this.packages.add(entryPackage);
+
     this.bundles = new BundleConfig(host);
     if (!this.env) {
       throw new Error('Bug in ember-auto-import: did not discover environment');

@@ -35,6 +35,7 @@ jobs:
           - 'cd packages/ember-auto-import  && yarn test'
           - 'cd packages/sample-es-latest   && yarn test'
           - 'cd packages/sample-skip-babel  && yarn test'
+          - 'cd packages/sample-symlinked-app-namespace && yarn test'
           - 'cd packages/ember-auto-import  && yarn test:node'
         exclude:
           - suite: 'cd packages/sample-direct      && yarn test:custom-bundles'
