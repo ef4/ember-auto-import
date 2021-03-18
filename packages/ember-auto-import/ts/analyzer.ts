@@ -9,7 +9,7 @@ import { isEqual, flatten } from 'lodash';
 import type Package from './package';
 import symlinkOrCopy from 'symlink-or-copy';
 import { TransformOptions } from '@babel/core';
-import { Expression, File } from '@babel/types';
+import { File, Node as BabelNode } from '@babel/types';
 import traverse from '@babel/traverse';
 
 makeDebug.formatters.m = (modules: Import[]) => {
@@ -283,7 +283,7 @@ async function babel7Parser(babelOptions: TransformOptions): Promise<(source: st
   };
 }
 
-function inferNameHint(exp: Expression) {
+function inferNameHint(exp: BabelNode) {
   if (exp.type === 'Identifier') {
     return exp.name;
   }

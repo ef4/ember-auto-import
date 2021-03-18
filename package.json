@@ -10,7 +10,8 @@
     "types/*"
   ],
   "resolutions": {
-    "@ember-decorators/babel-transforms/ember-cli-version-checker": "git+https://github.com/ef4/ember-cli-version-checker#0e33cbcd7faf17ec804b0c3fb64147b131a015de"
+    "@ember-decorators/babel-transforms/ember-cli-version-checker": "git+https://github.com/ef4/ember-cli-version-checker#0e33cbcd7faf17ec804b0c3fb64147b131a015de",
+    "**/browserslist": "^4.16.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.10.0",

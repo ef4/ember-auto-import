@@ -1,81 +1,66 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Build sample-direct",
-            "program": "${workspaceFolder}/node_modules/.bin/ember",
-            "cwd": "${workspaceFolder}/packages/sample-direct",
-            "args": [
-                "build"
-            ]
-        },
-        {
-          "type": "node",
-          "request": "launch",
-          "name": "Build sample-babel7",
-          "program": "${workspaceFolder}/node_modules/.bin/ember",
-          "cwd": "${workspaceFolder}/packages/sample-babel7",
-          "args": [
-              "build"
-          ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Build sample-indirect",
-            "program": "${workspaceFolder}/node_modules/.bin/ember",
-            "cwd": "${workspaceFolder}/packages/sample-indirect",
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "args": [
-                "build"
-            ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Build sample-merged",
-            "program": "${workspaceFolder}/node_modules/.bin/ember",
-            "cwd": "${workspaceFolder}/packages/sample-merged",
-            "args": [
-                "build"
-            ],
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Build sample-addon",
-            "program": "${workspaceFolder}/node_modules/.bin/ember",
-            "cwd": "${workspaceFolder}/packages/sample-addon",
-            "args": [
-                "build"
-            ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Build sample-conflict",
-            "program": "${workspaceFolder}/node_modules/.bin/ember",
-            "cwd": "${workspaceFolder}/packages/sample-conflict",
-            "args": [
-                "build"
-            ]
-        },
-        {
-          "type": "node",
-          "request": "launch",
-          "name": "Run node tests",
-          "program": "${workspaceFolder}/node_modules/.bin/qunit",
-          "cwd": "${workspaceFolder}/packages/ember-auto-import",
-          "args": [
-              "js/tests",
-              "--filter", "safe url example: import('//example.com/thing')"
-          ]
-      }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build sample-direct",
+      "program": "${workspaceFolder}/node_modules/.bin/ember",
+      "cwd": "${workspaceFolder}/packages/sample-direct",
+      "args": ["build"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build sample-babel6",
+      "program": "${workspaceFolder}/node_modules/.bin/ember",
+      "cwd": "${workspaceFolder}/packages/sample-babel6",
+      "args": ["build"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build sample-indirect",
+      "program": "${workspaceFolder}/node_modules/.bin/ember",
+      "cwd": "${workspaceFolder}/packages/sample-indirect",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "args": ["build"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build sample-merged",
+      "program": "${workspaceFolder}/node_modules/.bin/ember",
+      "cwd": "${workspaceFolder}/packages/sample-merged",
+      "args": ["build"],
+      "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build sample-addon",
+      "program": "${workspaceFolder}/node_modules/.bin/ember",
+      "cwd": "${workspaceFolder}/packages/sample-addon",
+      "args": ["build"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build sample-conflict",
+      "program": "${workspaceFolder}/node_modules/.bin/ember",
+      "cwd": "${workspaceFolder}/packages/sample-conflict",
+      "args": ["build"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run node tests",
+      "program": "${workspaceFolder}/node_modules/.bin/qunit",
+      "cwd": "${workspaceFolder}/packages/ember-auto-import",
+      "args": ["js/tests", "--filter", "safe url example: import('//example.com/thing')"]
+    }
+  ]
 }

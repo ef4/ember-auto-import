@@ -20,7 +20,7 @@
     "test:all": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.6.0",
+    "ember-cli-babel": "*",
     "ember-cli-htmlbars": "*",
     "sample-addon": "*"
   },
@@ -29,12 +29,9 @@
     "ember-ajax": "*",
     "ember-cli": "*",
     "ember-cli-dependency-checker": "*",
-    "ember-cli-htmlbars-inline-precompile": "*",
     "ember-cli-inject-live-reload": "*",
-    "ember-cli-qunit": "*",
-    "ember-cli-shims": "*",
     "ember-cli-sri": "*",
-    "ember-cli-uglify": "*",
+    "ember-cli-terser": "*",
     "ember-disable-prototype-extensions": "*",
     "ember-export-application-global": "*",
     "ember-load-initializers": "*",

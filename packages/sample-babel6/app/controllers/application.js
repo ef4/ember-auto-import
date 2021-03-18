@@ -1,16 +1,14 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember-decorators/object';
+import { computed } from '@ember/object';
 import aDependency from 'a-dependency';
 import aModuleDependency from 'a-module-dependency';
 
-export default class extends Controller {
-  @computed()
-  get result() {
+export default Controller.extend({
+  result: computed(function () {
     return aDependency();
-  }
+  }),
 
-  @computed()
-  get moduleResult() {
+  moduleResult: computed(function () {
     return aModuleDependency();
-  }
-}
+  }),
+});

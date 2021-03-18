@@ -1,9 +1,14 @@
+'use strict';
+
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2017,
+    ecmaVersion: 2018,
     sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true,
+    },
   },
   plugins: ['ember', '@typescript-eslint', 'prettier'],
   extends: [
@@ -36,15 +41,15 @@ module.exports = {
         'testem.js',
         'config/**/*.js',
         'tests/dummy/config/**/*.js',
-        'lib/**/*.js',
-        'fastboot-tests/**/*.js',
         'babel-plugin/**.js',
         '.eslintrc.js',
+        '.prettierrc.js',
+        '.template-lintrc.js',
+        'fastboot-tests/**/*.js',
       ],
       excludedFiles: ['addon/**', 'addon-test-support/**', 'app/**', 'tests/dummy/app/**'],
       parserOptions: {
         sourceType: 'script',
-        ecmaVersion: 2018,
       },
       env: {
         browser: false,
@@ -56,6 +61,7 @@ module.exports = {
         'no-var': 'error',
         '@typescript-eslint/no-var-requires': 'off',
       }),
+      extends: ['plugin:node/recommended'],
     },
   ],
 };

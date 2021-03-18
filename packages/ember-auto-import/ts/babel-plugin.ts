@@ -1,7 +1,7 @@
 // @ts-ignore
 import syntax from 'babel-plugin-syntax-dynamic-import';
 import { NodePath } from '@babel/core';
-import { Import, CallExpression, callExpression, identifier, stringLiteral } from '@babel/types';
+import { Import, CallExpression, Expression, callExpression, identifier, stringLiteral } from '@babel/types';
 import Package from './package';
 
 function emberAutoImport() {
@@ -22,7 +22,7 @@ function emberAutoImport() {
             call.replaceWith(
               callExpression(identifier('emberAutoImportDynamic'), [
                 stringLiteral(arg.quasis.map(q => q.value.cooked).join('${e}')),
-                ...arg.expressions,
+                ...(arg.expressions as Expression[]),
               ])
             );
           }
