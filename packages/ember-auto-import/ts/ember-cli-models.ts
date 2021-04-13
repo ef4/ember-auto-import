@@ -7,6 +7,7 @@ export interface Project {
   pkg: { name: string; version: string };
   root: string;
   addons: AddonInstance[];
+  isEnabled(): boolean;
 }
 
 export interface AppInstance {
@@ -23,6 +24,7 @@ interface BaseAddonInstance {
   options: any;
   addons: AddonInstance[];
   name: string;
+  isEnabled(): boolean;
 }
 
 export interface DeepAddonInstance extends BaseAddonInstance {

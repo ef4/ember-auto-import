@@ -28,7 +28,7 @@ export class LeaderChooser {
     return chooser;
   }
 
-  private tentative: { create: () => AutoImport; version: string } | undefined;
+  private tentative: { create: () => AutoImport; version: string; parent: AddonInstance | Project } | undefined;
   private locked: AutoImport | undefined;
 
   register(addon: AddonInstance, create: () => AutoImport) {
@@ -36,8 +36,9 @@ export class LeaderChooser {
       throw new Error(`bug: LeaderChooser already locked`);
     }
     let version = addon.pkg.version;
+    let parent = addon.parent;
     if (!this.tentative || gt(version, this.tentative.version)) {
-      this.tentative = { create, version };
+      this.tentative = { create, version, parent };
     }
   }
 
@@ -46,6 +47,13 @@ export class LeaderChooser {
       if (!this.tentative) {
         throw new Error(`bug: no candidates added`);
       }
+
+      let parentIncludedHookWillRun = this.tentative.parent.isEnabled?.() ?? true;
+      if (!parentIncludedHookWillRun) {
+        const parentName = this.tentative.parent.root.split('/').pop();
+        throw new Error(`bug: ${parentName} is the parent of the leader, but it's isEnabled hook returns false`);
+      }
+
       this.locked = this.tentative.create();
       let v1 = g[protocolV1];
       if (v1?.isV1Placeholder) {
