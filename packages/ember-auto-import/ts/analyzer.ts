@@ -9,7 +9,7 @@ import { isEqual, flatten } from 'lodash';
 import type Package from './package';
 import symlinkOrCopy from 'symlink-or-copy';
 import { TransformOptions } from '@babel/core';
-import { Expression, File, TSType } from '@babel/types';
+import type { ExportNamedDeclaration, Expression, File, ImportDeclaration, TSType } from '@babel/types';
 import traverse from '@babel/traverse';
 
 makeDebug.formatters.m = (modules: Import[]) => {
@@ -77,6 +77,15 @@ export default class Analyzer extends Plugin {
   private paths: Map<string, Import[]> = new Map();
 
   private parse: undefined | ((source: string) => File);
+
+  // Ignores type-only imports & exports, which are erased from the final build
+  // output.
+  // TypeScript: `import type foo from 'foo'`
+  // Flow: `import typeof foo from 'foo'`
+  private erasedImportKinds: Set<ImportDeclaration['importKind']> = new Set(['type', 'typeof']);
+  // TypeScript: `export type foo from 'foo'`
+  // Flow: doesn't have type-only exports
+  private erasedExportKinds: Set<ExportNamedDeclaration['exportKind']> = new Set(['type']);
 
   constructor(inputTree: Node, private pack: Package, private treeType?: TreeType) {
     super([inputTree], {
@@ -228,6 +237,8 @@ export default class Analyzer extends Plugin {
         }
       },
       ImportDeclaration: path => {
+        if (this.erasedImportKinds.has(path.node.importKind)) return;
+
         imports.push({
           isDynamic: false,
           specifier: path.node.source.value,
@@ -237,15 +248,16 @@ export default class Analyzer extends Plugin {
         });
       },
       ExportNamedDeclaration: path => {
-        if (path.node.source) {
-          imports.push({
-            isDynamic: false,
-            specifier: path.node.source.value,
-            path: relativePath,
-            package: this.pack,
-            treeType: this.treeType,
-          });
-        }
+        if (!path.node.source) return;
+        if (this.erasedExportKinds.has(path.node.exportKind)) return;
+
+        imports.push({
+          isDynamic: false,
+          specifier: path.node.source.value,
+          path: relativePath,
+          package: this.pack,
+          treeType: this.treeType,
+        });
       },
     });
     return imports;
